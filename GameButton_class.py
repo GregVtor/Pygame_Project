@@ -8,3 +8,6 @@ class GameButton(GameObject):
         self.func = func
         self.args = args
         self.kwargs = kwargs
+
+    def clicked(self):
+        self.func(self.args, self.kwargs)
