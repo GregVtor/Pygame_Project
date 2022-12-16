@@ -4,10 +4,9 @@ from math import cos, sin
 
 
 class GameObject(pygame.sprite.Sprite):
-    def __init__(self, group, image_adr, size, cords, speed_vector):
+    def __init__(self, group, image_adr, size, speed_vector):
         super().__init__(group)
         self.size = size
-        self.cords = cords
         self.image = self.image(image_adr)
         self.speed_x, self.speed_y = speed_vector[1] * cos(speed_vector[0]), speed_vector[1] * sin(speed_vector[0])
         self.rect = self.image.get_rect(topleft=cords)
@@ -19,10 +18,7 @@ class GameObject(pygame.sprite.Sprite):
         return img
 
     def update(self, time, rotation=0):
-        self.image = pygame.transform.rotate(self.image, rotation * time)
-        self.rect = self.rect = self.image.get_rect(topleft=self.cords)
         self.rect.move(self.speed_x * time, self.speed_y * time)
-        self.cords = [self.cords[0] + self.speed_x * time, self.cords[1] + self.speed_y * time]
 
 
 if __name__ == '__main__':
