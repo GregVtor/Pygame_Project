@@ -4,7 +4,7 @@ from math import cos, sin
 
 
 class GameObject(pygame.sprite.Sprite):
-    def __init__(self, group, image_adr, size, speed_vector):
+    def __init__(self, group, image_adr, size, cords, speed_vector):
         super().__init__(group)
         self.size = size
         self.image = self.image(image_adr)
