@@ -4,16 +4,9 @@ from GameObject_class import GameObject
 
 
 class Player(GameObject):
-    def __init__(self, group, animations, image_adr, size, cords,
+    def __init__(self, group, animations, size, cords,
                  speed_vector):
-        super().__init__()
-        self.size = size
-        self.group = group
-        self.animations = animations
-        self.image_adr = image_adr
-        self.cords = cords
-        self.speed_vector = speed_vector
-
+        super().__init__(group, animations, size, cords, speed_vector)
         self.bool_jump = False
         self.pomenal = False
 
@@ -26,18 +19,34 @@ class Player(GameObject):
         elif self.pomenal and self.cords[1] >= self.rect.topleft:
             self.rect.move_ip(*self.cords)
             self.bool_jump = False
-        elif not self.pomenal:
-            self.speed_vector = 90
 
     def update(self, time, rotation=0):
         super().update(time, rotation)
         for event in pygame.event.get():
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.bool_jump = True
+                print('hi')
         if self.bool_jump:
+            self.speed_vector = -90
+            self.speed_y = 100
             self.jump(time)
 
 
-
-
-
+if __name__ == '__main__':
+    pygame.init()
+    screen = pygame.display.set_mode((600, 500))
+    clock = pygame.time.Clock()
+    running = True
+    group = pygame.sprite.Group()
+    sprite = Player(group, ['Player', 'deadpool.png'], [300, 350], [50, 200], [0, 0])
+    while running:
+        screen.fill((255, 255, 255))
+        tick = clock.tick(60) / 1000
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+        group.draw(screen)
+        group.update(tick)
+        pygame.display.flip()
+    pygame.quit()
