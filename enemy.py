@@ -11,8 +11,9 @@ class Enemy(GameObject):
 
     def update(self, time):
         super().update(time)
-        if self.hp < 0:
+        if self.hp <= 0 and self.rect.topright[0] < 0:
             self.kill()
+            print('I am dead')
 
     def damage(self, damage):
         self.hp -= damage
@@ -20,11 +21,12 @@ class Enemy(GameObject):
 
 pygame.init()
 group = pygame.sprite.Group()
-enemy1 = Enemy(group, ['Player', 'deadpool.png'], (300, 350), (600, 350), 60)
-screen = pygame.display.set_mode((600, 500))
+enemy1 = Enemy(group, ['Player', 'deadpool.png'], (300, 350), (600, 350), 300)
+screen = pygame.display.set_mode((300, 500))
 clock = pygame.time.Clock()
 running = True
 while running:
+    enemy1.damage(1)
     screen.fill((255, 255, 255))
     tick = clock.tick(60) / 1000
     for event in pygame.event.get():
