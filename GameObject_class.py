@@ -20,7 +20,7 @@ class GameObject(pygame.sprite.Sprite):
         img = pygame.transform.scale(img, self.size)
         return img
 
-    def update(self, time, rotation=0):
+    def update(self, time):
         self.rect.move_ip(self.speed_x * time, self.speed_y * time)
 
     def animate(self, key): ...
