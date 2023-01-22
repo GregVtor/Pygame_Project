@@ -19,7 +19,7 @@ class GameObject(pygame.sprite.Sprite):
         self.init_vector(speed_vector)
 
     def image_con(self, image_adr):
-        adr = os.path.join('data', 'texture', *image_adr)
+        adr = os.path.join('../data', 'texture', *image_adr)
         return pygame.image.load(adr)
 
     def init_vector(self, speed_vector):
