@@ -12,7 +12,8 @@ def start_screen(clock, screen):
     group = pygame.sprite.Group()
     sprite = GameButton(group, {'start': [['backgrounds', 'Background.png'],
                                           1, 1]}, (600, 900), (0, 0), stop)
-
+    font = pygame.font.SysFont('arial', 30)
+    text = font.render('Начать игру', False, 'red')
     while running:
         tick = clock.tick(60) / 1000
         screen.fill('red')
@@ -24,6 +25,7 @@ def start_screen(clock, screen):
 
         group.update(tick)
         group.draw(screen)
+        screen.blit(text, (230, 400))
         pygame.display.flip()
 
 
