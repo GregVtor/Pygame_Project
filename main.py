@@ -17,8 +17,9 @@ def start_screen(clock, screen):
         screen.fill('red')
 
         for event in pygame.event.get():
-            if event.type == pygame.quit():
+            if event.type == pygame.QUIT:
                 pygame.quit()
+                exit(0)
 
         group.update(tick)
         group.draw(screen)
