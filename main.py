@@ -6,6 +6,7 @@ def start_screen(clock, screen):
     running = True
 
     def stop(*args, **kwargs):
+        nonlocal running
         running = False
 
     group = pygame.sprite.Group()
@@ -29,4 +30,5 @@ def start_screen(clock, screen):
 pygame.init()
 screen = pygame.display.set_mode((600, 900))
 Clock = pygame.time.Clock()
+pygame.display.flip()
 start_screen(Clock, screen)
