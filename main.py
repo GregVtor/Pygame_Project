@@ -17,7 +17,7 @@ def start_screen(clock, screen):
     group = pygame.sprite.Group()
     sprite = GameButton(group, {'start': [['backgrounds', 'Background.png'],
                                           1, 1]}, (600, 900), (0, 0), stop)
-    font = pygame.font.Font(font_adr('Pixel Times.ttf'), 30)
+    font = pygame.font.Font(font_adr('Pixel Times Bold.ttf'), 30)
     text = font.render('Начать игру', False, 'red')
     while running:
         tick = clock.tick(60) / 1000
