@@ -1,13 +1,51 @@
-import pygame
 import os
+import sqlite3
+
+import pygame
+
 from GameButton_class import GameButton
+
+ALLOW = '1234567890-_=+qwertyuiopasdfghjklzxcvbnm.,йцукенгшщзхфывапролджэячсмитьбю'
+
+
+def db_con(request):
+    db = sqlite3.connect('identifier.sqlite')
+    sn = db.cursor()
+    return sn.execute(request)
 
 
 def font_adr(name):
     return os.path.join('data', 'fonts', name)
 
 
-def start_screen(clock, screen):
+def register(screem, Clock):
+    running = True
+    text = ''
+    font = pygame.font.Font(font_adr('Pixel Times.ttf'), 56)
+    col = 0
+
+    def stop(*args, **kwargs):
+        running = False
+
+    while True:
+        text_s = font.render(text, False, 'red')
+        screen.fill((220, 180, 200))
+        tick = Clock.tick(60) / 1000
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.KEYDOWN and event.unicode.lower() in ALLOW and len(text) <= 13:
+                text += event.unicode
+        if pygame.key.get_pressed()[pygame.K_BACKSPACE] and col == 0:
+            text = text[:-1]
+            col = 10
+        screen.blit(text_s, (100, 400))
+        pygame.display.flip()
+        if col > 0:
+            col -= 1
+
+
+def start_screen(screen, clock):
     running = True
 
     def stop(*args, **kwargs):
@@ -17,7 +55,7 @@ def start_screen(clock, screen):
     group = pygame.sprite.Group()
     sprite = GameButton(group, {'start': [['backgrounds', 'Background.png'],
                                           1, 1]}, (600, 900), (0, 0), stop)
-    font = pygame.font.Font(font_adr('Pixel Times Bold.ttf'), 30)
+    font = pygame.font.Font(font_adr('Pixel Times.ttf'), 64)
     text = font.render('Начать игру', False, 'red')
     while running:
         tick = clock.tick(60) / 1000
@@ -26,16 +64,23 @@ def start_screen(clock, screen):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                exit(0)
 
         group.update(tick)
         group.draw(screen)
-        screen.blit(text, (230, 400))
+        screen.blit(text, (100, 400))
         pygame.display.flip()
+
+
+def game(screen, clock):
+    running = True
+    users_data = db_con('SELECT * from Users').fetchall()
+    if not users_data:
+        register(screen, clock)
 
 
 pygame.init()
 screen = pygame.display.set_mode((600, 900))
 Clock = pygame.time.Clock()
 pygame.display.flip()
-start_screen(Clock, screen)
+start_screen(screen, Clock)
+game(screen, Clock)
