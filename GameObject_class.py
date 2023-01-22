@@ -15,7 +15,7 @@ class GameObject(pygame.sprite.Sprite):
         self.animations = animations
         self.animate('start', True)
         self.image = self.frames[0]
-        self.rect = self.image.get_rect()
+        self.rect = self.image.get_rect(topleft=cords)
         self.init_vector(speed_vector)
 
     def image_con(self, image_adr):
