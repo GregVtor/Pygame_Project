@@ -14,6 +14,7 @@ class GameButton(GameObject):
 
     def update(self, time):
         super().update(time)
+        print(pygame.mouse.get_pressed()[0], self.rect.collidepoint(pygame.mouse.get_pos()))
         if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
             self.clicked()
 
