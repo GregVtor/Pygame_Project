@@ -4,6 +4,7 @@ import sqlite3
 import pygame
 
 from GameButton_class import GameButton
+from player_class import Player
 
 ALLOW = '1234567890-_=+qwertyuiopasdfghjklzxcvbnm.,йцукенгшщзхфывапролджэячсмитьбю'
 FPS = 60
@@ -94,6 +95,8 @@ def game(screen, clock):
         register(screen, clock)
     else:
         login(screen, clock)
+    # player_group = pygame.sprite.Group()
+    # player = Player(player_group, {'start': [['Player', 'deadpool.png'], 1 , 1]}, (0, 0), )
 
 
 pygame.init()
