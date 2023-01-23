@@ -5,9 +5,11 @@ import pygame
 
 from GameButton_class import GameButton
 from player_class import Player
+from Backgroung_class import Backgroung
 
 ALLOW = '1234567890-_=+qwertyuiopasdfghjklzxcvbnm.,йцукенгшщзхфывапролджэячсмитьбю'
 FPS = 60
+user_login_id = None
 
 
 def db_con(request):
@@ -64,10 +66,10 @@ def login(screen, clock): # Сава пиши тут
     text = ''
     font = pygame.font.Font(font_adr('Pixel Times.ttf'), 56)
     col = 0
+    error = False
 
     def check(*args, **kwargs):
-        nonlocal running
-        nonlocal text
+        nonlocal running, text, error
         error = False
         if not text:
             return
@@ -75,18 +77,13 @@ def login(screen, clock): # Сава пиши тут
             running = False
         elif not db_con(f'SELECT id FROM Users WHERE Name == "{text}"').fetchone():
             error = True
-            font = pygame.font.Font(font_adr('Pixel Times.ttf'), 64)
-            text1 = font.render('Hello Привет', False, (180, 0, 0))
-
-            screen.blit(text1, (10, 50))
-
-            pygame.display.update()
 
 
 
     group = pygame.sprite.Group()
     sprite = GameButton(group, {'start': [['login_btn.png'],
                                           1, 1]}, (6, 900), (150, 500), check)
+    t_error = font.render('Такого имени не существует', False, 'black')
 
     while running:
         text_s = font.render(text, False, 'red')
@@ -104,6 +101,8 @@ def login(screen, clock): # Сава пиши тут
         screen.blit(text_s, (100, 400))
         group.draw(screen)
         group.update(tick)
+        if error:
+            screen.blit(t_error, (0, 0))
         pygame.display.flip()
 
 def start_screen(screen, clock):
@@ -139,8 +138,11 @@ def game(screen, clock):
         register(screen, clock)
     else:
         login(screen, clock)
-    # player_group = pygame.sprite.Group()
-    # player = Player(player_group, {'start': [['Player', 'deadpool.png'], 1 , 1]}, (0, 0), )
+    player_group = pygame.sprite.Group()
+    player = Player(player_group, {'start': [['Player', 'deadpool.png'], 1, 1]}, (0, 0), (0, 0))
+
+
+
 
 
 pygame.init()
