@@ -8,12 +8,14 @@ from GameButton_class import GameButton
 ALLOW = '1234567890-_=+qwertyuiopasdfghjklzxcvbnm.,йцукенгшщзхфывапролджэячсмитьбю'
 FPS = 60
 
+
 def db_con(request):
     db = sqlite3.connect('identifier.sqlite')
     sn = db.cursor()
     ret = sn.execute(request)
     db.commit()
     return ret
+
 
 def font_adr(name):
     return os.path.join('data', 'fonts', name)
@@ -31,7 +33,6 @@ def register(screem, Clock):
             return
         running = False
         db_con(f'INSERT INTO Users(Name) VALUES ("{text}")')
-
 
     group = pygame.sprite.Group()
     sprite = GameButton(group, {'start': [['reg_button.png'],
@@ -57,7 +58,7 @@ def register(screem, Clock):
             col -= 1
 
 
-def login(screen, clock): ...
+def login(screen, clock): ...  # Сава пиши тут
 
 
 def start_screen(screen, clock):
@@ -91,6 +92,8 @@ def game(screen, clock):
     users_data = db_con('SELECT * from Users').fetchall()
     if not users_data:
         register(screen, clock)
+    else:
+        login(screen, clock)
 
 
 pygame.init()
