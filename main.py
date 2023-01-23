@@ -39,7 +39,7 @@ def register(screem, Clock):
 
     while running:
         text_s = font.render(text, False, 'red')
-        screen.fill((220, 180, 200))
+        screen.fill((220, 180, 0))
         tick = Clock.tick(FPS) / 1000
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -55,6 +55,9 @@ def register(screem, Clock):
         pygame.display.flip()
         if col > 0:
             col -= 1
+
+
+def login(screen, clock): ...
 
 
 def start_screen(screen, clock):

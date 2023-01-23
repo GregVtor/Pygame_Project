@@ -18,6 +18,9 @@ class GameObject(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=cords)
         self.init_vector(speed_vector)
 
+    def move_na(self, x, y):
+        self.rect.move_ip(x, y)
+
     def image_con(self, image_adr):
         adr = os.path.join('data', 'texture', *image_adr)
         return pygame.image.load(adr)
