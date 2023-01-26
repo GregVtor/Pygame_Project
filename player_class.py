@@ -11,13 +11,13 @@ class Player(GameObject):
         self.high_of_jump = 200
 
     def jump(self, tick):
-        if not self.pomenal and self.rect.bottomleft[1] <= self.high_of_jump:
+        if not self.pomenal and self.rect.topleft[1] <= self.high_of_jump:
             self.pomenal = True
             self.init_vector([90, 200])
         elif self.pomenal and self.cords[1] <= self.rect.topleft[-1]:
             self.bool_jump = False
             self.pomenal = False
-            self.inint_vector([0, 0])
+            self.init_vector([0, 0])
 
     def update(self, time):
         super().update(time)
