@@ -13,7 +13,7 @@ class Player(GameObject):
     def jump(self, tick):
         if not self.pomenal and self.rect.topleft[1] <= self.high_of_jump:
             self.pomenal = True
-            self.init_vector([90, 200])
+            self.init_vector([90, 300])
         elif self.pomenal and self.cords[1] <= self.rect.topleft[-1]:
             self.bool_jump = False
             self.pomenal = False
@@ -25,7 +25,7 @@ class Player(GameObject):
             self.bool_jump = True
         if self.bool_jump:
             if not self.pomenal:
-                self.init_vector([-90, 200])
+                self.init_vector([-90, 300])
             self.jump(time)
 
 

@@ -5,9 +5,10 @@ import pygame
 
 from GameButton_class import GameButton
 from player_class import Player
+from Backgroung_class import Backgroung
 
 ALLOW = '1234567890-_=+qwertyuiopasdfghjklzxcvbnm.,йцукенгшщзхфывапролджэячсмитьбю'
-FPS = 10
+FPS = 24
 Name = ''
 
 
@@ -81,16 +82,17 @@ def start_screen(screen, clock):
 
 def game(screen, clock):
     running = True
-    player_group = pygame.sprite.Group()
-    player = Player(player_group, {'start': [['Player', 'player.png'], 1, 5]}, (0, 0), (30, 400), (0, 0))
+    main_group = pygame.sprite.Group()
+    fon = Backgroung(main_group, {'start': [['backgrounds', 'gr.png'], 1, 1]}, (0, 0), (0, 0), (180, 400))
+    player = Player(main_group, {'start': [['Player', 'player.png'], 1, 5]}, (0, 0), (30, 430), (0, 0))
     while running:
         screen.fill('white')
         tick = clock.tick(FPS) / 1000
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-        player_group.draw(screen)
-        player.update(tick)
+        main_group.draw(screen)
+        main_group.update(tick)
         pygame.display.flip()
 
 
@@ -103,7 +105,7 @@ start_screen(screen, Clock)
 if not os.path.exists('data.json'):
     data = open('data.json', 'w')
     register(screen, Clock)
-    start_dict = {'last_time': datetime.datetime.now(),
+    start_dict = {'last_time': str(datetime.datetime.now()),
             'Name': Name,
             'Money': 0,
             'weapon-1 level': 0,
@@ -111,5 +113,6 @@ if not os.path.exists('data.json'):
             'weapon-3 level': 0,
             'money bonus': 0
             }
-    print(json.dumps(start_dict))
+    data.write(json.dumps(start_dict))
+    data.close()
 game(screen, Clock)
