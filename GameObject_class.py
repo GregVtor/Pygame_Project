@@ -1,4 +1,5 @@
 import os
+
 from math import cos, sin, pi
 
 import pygame
@@ -23,7 +24,7 @@ class GameObject(pygame.sprite.Sprite):
 
     def image_con(self, image_adr):
         adr = os.path.join('data', 'texture', *image_adr)
-        return pygame.image.load(adr)
+        return pygame.image.load(adr).convert_alpha()
 
     def init_vector(self, speed_vector):
         self.speed_x, self.speed_y = speed_vector[1] * cos(speed_vector[0] * pi / 180), \
@@ -52,8 +53,9 @@ class GameObject(pygame.sprite.Sprite):
         for i in range(row):
             for j in range(col):
                 sup = pygame.Surface((w, h))
+                sup.set_colorkey((0, 0, 0))
                 sup.blit(image, (0, 0), (w * j, h * i, w, h))
-                self.frames.append(sup.convert())
+                self.frames.append(sup.convert_alpha())
 
 
 if __name__ == '__main__':
