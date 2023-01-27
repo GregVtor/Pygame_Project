@@ -6,10 +6,18 @@ import pygame
 from GameButton_class import GameButton
 from player_class import Player
 from Backgroung_class import Backgroung
+from coin import Coin
+from random import randint
 
 ALLOW = '1234567890-_=+qwertyuiopasdfghjklzxcvbnm.,йцукенгшщзхфывапролджэячсмитьбю'
 FPS = 24
 Name = ''
+Money = 0
+
+
+def m():
+    global Money
+    Money += 1
 
 
 def register(screem, Clock):
@@ -20,12 +28,11 @@ def register(screem, Clock):
 
     def stop(*args, **kwargs):
         nonlocal running
-        global  Name
+        global Name
         if not text:
             return
         running = False
         Name = text
-
 
     group = pygame.sprite.Group()
     sprite = GameButton(group, {'start': [['reg_button.png'],
@@ -53,6 +60,7 @@ def register(screem, Clock):
 
 def font_adr(name):
     return os.path.join('data', 'fonts', name)
+
 
 def start_screen(screen, clock):
     running = True
@@ -83,9 +91,20 @@ def start_screen(screen, clock):
 def game(screen, clock):
     running = True
     main_group = pygame.sprite.Group()
-    fon = Backgroung(main_group, {'start': [['backgrounds', 'gr.png'], 1, 1]}, (0, 0), (0, 0), (180, 400))
+    fon = Backgroung(main_group, {'start': [['backgrounds', 'gr.png'], 1, 1]}, (0, 0), (0, 0), (180, 200))
     player = Player(main_group, {'start': [['Player', 'player.png'], 1, 5]}, (0, 0), (30, 430), (0, 0))
+    money_group = pygame.sprite.Group()
+    col = 0
     while running:
+        if not col:
+            Coin(money_group, {'start': [['pygame-8-1.png'], 2, 8]}, (randint(900, 1000), randint(200, 600)), player, m)
+            Coin(money_group, {'start': [['pygame-8-1.png'], 2, 8]}, (randint(900, 1000), randint(200, 600)), player, m)
+            Coin(money_group, {'start': [['pygame-8-1.png'], 2, 8]}, (randint(900, 1000), randint(200, 600)), player, m)
+            Coin(money_group, {'start': [['pygame-8-1.png'], 2, 8]}, (randint(900, 1000), randint(200, 600)), player, m)
+            Coin(money_group, {'start': [['pygame-8-1.png'], 2, 8]}, (randint(900, 1000), randint(200, 600)), player, m)
+            col = randint(24, 120)
+        else:
+            col -= 1
         screen.fill('white')
         tick = clock.tick(FPS) / 1000
         for event in pygame.event.get():
@@ -93,7 +112,10 @@ def game(screen, clock):
                 running = False
         main_group.draw(screen)
         main_group.update(tick)
+        money_group.draw(screen)
+        money_group.update(tick)
         pygame.display.flip()
+        print(f'Монеты: {Money}')
 
 
 
@@ -106,13 +128,27 @@ if not os.path.exists('data.json'):
     data = open('data.json', 'w')
     register(screen, Clock)
     start_dict = {'last_time': str(datetime.datetime.now()),
-            'Name': Name,
-            'Money': 0,
-            'weapon-1 level': 0,
-            'weapon-2 level': 0,
-            'weapon-3 level': 0,
-            'money bonus': 0
-            }
+                  'Name': Name,
+                  'Money': 0,
+                  'weapon-1 level': 0,
+                  'weapon-2 level': 0,
+                  'weapon-3 level': 0,
+                  'money bonus': 0
+                  }
     data.write(json.dumps(start_dict))
     data.close()
+data = json.loads(open('data.json', 'r').read())
+Money = data['Money']
+Name = data['Name']
 game(screen, Clock)
+data = open('data.json', 'w')
+start_dict = {'last_time': str(datetime.datetime.now()),
+              'Name': Name,
+              'Money': Money,
+              'weapon-1 level': 0,
+              'weapon-2 level': 0,
+              'weapon-3 level': 0,
+              'money bonus': 0
+              }
+data.write(json.dumps(start_dict))
+data.close()
