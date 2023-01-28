@@ -88,12 +88,24 @@ def start_screen(screen, clock):
         pygame.display.flip()
 
 
+def fast_move():
+    pass
+
+
+def open_invent():
+    pass
+
+
 def game(screen, clock):
     running = True
     main_group = pygame.sprite.Group()
     fon = Backgroung(main_group, {'start': [['backgrounds', 'gr.png'], 1, 1]}, (0, 0), (0, 0), (180, 200))
     player = Player(main_group, {'start': [['Player', 'player.png'], 1, 5]}, (0, 0), (30, 430), (0, 0))
     money_group = pygame.sprite.Group()
+    fast_btn = GameButton(main_group, {'start': [['fast.xcf'], 1, 1]},
+                          (1, 1), (0, 670), fast_move)
+    inventory_btn = GameButton(main_group, {'start': [['invent2_scaled.xcf'], 1, 1]},
+                          (1, 1), (100, 620), open_invent)
     col = 0
     while running:
         if not col:
