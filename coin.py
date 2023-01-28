@@ -1,4 +1,5 @@
 from GameObject_class import GameObject
+import pygame
 
 
 class Coin(GameObject):
@@ -9,7 +10,7 @@ class Coin(GameObject):
 
     def update(self, tick):
         super().update(tick)
-        if self.rect.colliderect(self.player):
+        if pygame.sprite.collide_mask(self, self.player):
             self.func_add()
             self.kill()
         if self.rect.topright[0] <= 0:
