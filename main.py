@@ -99,9 +99,8 @@ def open_invent():
 def game(screen, clock):
     running = True
     main_group = pygame.sprite.Group()
-    font = pygame.font.Font(font_adr('Pixel Times.ttf'), 24)
     fon = Backgroung(main_group, {'start': [['backgrounds', 'gr.png'], 1, 1]}, (0, 0), (0, 0), (180, 200))
-    player = Player(main_group, {'start': [['Player', 'run.png'], 5, 6]}, (0, 0), (30, 700 - 185), (0, 0))
+    player = Player(main_group, {'start': [['Player', 'player.png'], 1, 5]}, (0, 0), (30, 430), (0, 0))
     money_group = pygame.sprite.Group()
     fast_btn = GameButton(main_group, {'start': [['fast.xcf'], 1, 1]},
                           (1, 1), (0, 670), fast_move)
@@ -110,7 +109,11 @@ def game(screen, clock):
     col = 0
     while running:
         if not col:
-            [Coin(money_group, {'start': [['pygame-8-1.png'], 2, 8]}, (randint(900, 1000), randint(200, 600)), player, m) for i in range(randint(0, 10))]
+            Coin(money_group, {'start': [['pygame-8-1.png'], 2, 8]}, (randint(900, 1000), randint(200, 600)), player, m)
+            Coin(money_group, {'start': [['pygame-8-1.png'], 2, 8]}, (randint(900, 1000), randint(200, 600)), player, m)
+            Coin(money_group, {'start': [['pygame-8-1.png'], 2, 8]}, (randint(900, 1000), randint(200, 600)), player, m)
+            Coin(money_group, {'start': [['pygame-8-1.png'], 2, 8]}, (randint(900, 1000), randint(200, 600)), player, m)
+            Coin(money_group, {'start': [['pygame-8-1.png'], 2, 8]}, (randint(900, 1000), randint(200, 600)), player, m)
             col = randint(24, 120)
         else:
             col -= 1
@@ -123,14 +126,12 @@ def game(screen, clock):
         main_group.update(tick)
         money_group.draw(screen)
         money_group.update(tick)
-        screen.blit(font.render(f'Монеты: {Money}', False, 'white'), (0, 0))
         pygame.display.flip()
         print(f'Монеты: {Money}')
 
 
 
 pygame.init()
-screen = pygame.display.set_mode((600, 900))
 screen = pygame.display.set_mode((600, 900))
 Clock = pygame.time.Clock()
 pygame.display.flip()
