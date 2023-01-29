@@ -1,18 +1,21 @@
-import os
-import json
 import datetime
-import pygame
-
-from GameButton_class import GameButton
-from player_class import Player
-from Backgroung_class import Backgroung
-from coin import Coin
+import json
+import os
 from random import randint
 
+import pygame
+
+from GameObject_class import GameObject
+from Backgroung_class import Backgroung
+from GameButton_class import GameButton
+from coin import Coin
+from player_class import Player
+
 ALLOW = '1234567890-_=+qwertyuiopasdfghjklzxcvbnm.,йцукенгшщзхфывапролджэячсмитьбю'
-FPS = 24
+fps = 24
 Name = ''
 Money = 0
+move = -24 * 5
 
 
 def m():
@@ -41,7 +44,7 @@ def register(screem, Clock):
     while running:
         text_s = font.render(text, False, 'red')
         screen.fill((220, 180, 0))
-        tick = Clock.tick(FPS) / 1000
+        tick = Clock.tick(fps) / 1000
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -75,7 +78,7 @@ def start_screen(screen, clock):
     font = pygame.font.Font(font_adr('Pixel Times.ttf'), 64)
     text = font.render('Начать игру', False, 'red')
     while running:
-        tick = clock.tick(FPS) / 1000
+        tick = clock.tick(fps) / 1000
         screen.fill('red')
 
         for event in pygame.event.get():
@@ -88,16 +91,28 @@ def start_screen(screen, clock):
         pygame.display.flip()
 
 
-def fast_move():
-    pass
-
-
-def open_invent():
-    pass
-
-
 def game(screen, clock):
+    global fps, move
+
+    def open_invent(*args, **kwargs):
+        nonlocal menu
+        menu = True
+
+    def fast_move(*args, **kwargs):
+        global fps, move
+        nonlocal coin_speed, fon
+        if move == -24 * 5:
+            fps = 48
+            move = 48 * 10
+            coin_speed = 400
+            fon.init_vector((-180, 400))
+
     running = True
+    coin_speed = 200
+    menu = False
+    menu_group = pygame.sprite.Group()
+    menu = GameObject(menu_group, {'start': [['menu.png'], 1, 1]}, (0, 0), (0, 0), (0, 0))
+    font = pygame.font.Font(font_adr('Pixel Times.ttf'), 24)
     main_group = pygame.sprite.Group()
     fon = Backgroung(main_group, {'start': [['backgrounds', 'gr.png'], 1, 1]}, (0, 0), (0, 0), (180, 200))
     player = Player(main_group, {'start': [['Player', 'player.png'], 1, 5]}, (0, 0), (30, 430), (0, 0))
@@ -105,20 +120,18 @@ def game(screen, clock):
     fast_btn = GameButton(main_group, {'start': [['fast.xcf'], 1, 1]},
                           (1, 1), (0, 670), fast_move)
     inventory_btn = GameButton(main_group, {'start': [['invent2_scaled.xcf'], 1, 1]},
-                          (1, 1), (100, 620), open_invent)
+                               (1, 1), (100, 620), open_invent)
     col = 0
+
     while running:
         if not col:
-            Coin(money_group, {'start': [['pygame-8-1.png'], 2, 8]}, (randint(900, 1000), randint(200, 600)), player, m)
-            Coin(money_group, {'start': [['pygame-8-1.png'], 2, 8]}, (randint(900, 1000), randint(200, 600)), player, m)
-            Coin(money_group, {'start': [['pygame-8-1.png'], 2, 8]}, (randint(900, 1000), randint(200, 600)), player, m)
-            Coin(money_group, {'start': [['pygame-8-1.png'], 2, 8]}, (randint(900, 1000), randint(200, 600)), player, m)
-            Coin(money_group, {'start': [['pygame-8-1.png'], 2, 8]}, (randint(900, 1000), randint(200, 600)), player, m)
+            [Coin(money_group, {'start': [['pygame-8-1.png'], 2, 8]}, (randint(900, 1000), randint(200, 600)),
+                  (-180, coin_speed), player, m) for _ in range(randint(0, 10))]
             col = randint(24, 120)
         else:
             col -= 1
         screen.fill('white')
-        tick = clock.tick(FPS) / 1000
+        tick = clock.tick(fps) / 1000
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -126,9 +139,15 @@ def game(screen, clock):
         main_group.update(tick)
         money_group.draw(screen)
         money_group.update(tick)
+        screen.blit(font.render(f'Монеты: {Money}', False, 'red'), (0, 0))
         pygame.display.flip()
-        print(f'Монеты: {Money}')
-
+        if move == 0:
+            fps = 24
+            coin_speed = 200
+            fon.init_vector((-180, 200))
+        if move > -24 * 5:
+            move -= 1
+        print(move)
 
 
 pygame.init()
@@ -145,7 +164,7 @@ if not os.path.exists('data.json'):
                   'weapon-1 level': 0,
                   'weapon-2 level': 0,
                   'weapon-3 level': 0,
-                  'money bonus': 0
+                  'money per second': 0
                   }
     data.write(json.dumps(start_dict))
     data.close()
@@ -160,7 +179,7 @@ start_dict = {'last_time': str(datetime.datetime.now()),
               'weapon-1 level': 0,
               'weapon-2 level': 0,
               'weapon-3 level': 0,
-              'money bonus': 0
+              'money per second': 0
               }
 data.write(json.dumps(start_dict))
 data.close()
