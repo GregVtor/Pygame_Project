@@ -8,6 +8,5 @@ class Backgroung(GameObject):
 
     def update(self, time):
         super().update(time)
-        print(self.rect.topright)
         if self.rect.topright[0] <= self.screen_width:
             self.rect.move_ip(self.rect.width - self.screen_width, 0)
